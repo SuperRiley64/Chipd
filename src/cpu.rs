@@ -7,6 +7,7 @@ const DISPLAY_HEIGHT: usize = 32;
 const PROGRAM_START: u16 = 0x200;
 
 pub struct Cpu {
+    pub rom: [u8; MEMORY_SIZE],
     pub memory: [u8; MEMORY_SIZE],
     pub v: [u8; 16],
     pub i: u16,
@@ -30,6 +31,7 @@ pub struct Cpu {
 impl Cpu {
     pub fn new() -> Self {
         let mut cpu = Self {
+            rom: [0; MEMORY_SIZE],
             memory: [0; MEMORY_SIZE],
             v: [0; 16],
             i: 0,
@@ -74,16 +76,16 @@ impl Cpu {
             0xF0, 0x80, 0xF0, 0x80, 0x80, // F
         ];
 
-        self.memory[0x000..0x050].copy_from_slice(&fontset);
+        self.rom[0x000..0x050].copy_from_slice(&fontset);
     }
 
     pub fn load_rom(&mut self, filename: &str) -> std::io::Result<()> {
         let rom = fs::read(filename)?;
 
         for (offset, byte) in rom.iter().enumerate() {
-            self.memory[PROGRAM_START as usize + offset] = *byte;
+            self.rom[PROGRAM_START as usize + offset] = *byte;
         }
-
+        self.memory = self.rom;
         Ok(())
     }
 
@@ -377,6 +379,7 @@ impl Cpu {
 
     pub fn reset(&mut self) {
         self.memory[PROGRAM_START as usize..].fill(0);
+        self.memory = self.rom;
         self.v.fill(0);
         self.stack.fill(0);
         self.keys.fill(false);
@@ -393,7 +396,5 @@ impl Cpu {
         self.paused = false;
         self.blocked = false;
         self.key_register = None;
-
-        self.load_fontset();
     }
 }

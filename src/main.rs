@@ -5,7 +5,7 @@ use cpu::Cpu;
 use std::{env, thread, time::Duration, time::Instant};
 use sdl2::pixels::Color;
 use sdl2::event::Event;
-use sdl2::keyboard::Keycode;
+use sdl2::keyboard::{Keycode, Mod};
 use sdl2::rect::Rect;
 use sdl2::render::Canvas;
 use sdl2::video::Window;
@@ -103,6 +103,17 @@ fn main() {
                 }
 
                 Event::KeyDown {
+                    keycode: Some(Keycode::R),
+                    keymod,
+                    repeat: false,
+                    ..
+                } if keymod.intersects(Mod::LCTRLMOD | Mod::RCTRLMOD) => {
+                    println!("Reset!");
+                    cpu.reset();
+                }
+
+                // Chip 8 emulator key down
+                Event::KeyDown {
                     keycode: Some(key),
                     repeat: false,
                     ..
@@ -112,6 +123,7 @@ fn main() {
                     }
                 }
 
+                // Chip 8 emulator key up
                 Event::KeyUp {
                     keycode: Some(key),
                     ..
