@@ -97,7 +97,7 @@ impl Cpu {
     }
 
     pub fn emu_cycle(&mut self) {
-        if self.blocked {
+        if self.paused {
             return;
         }
 

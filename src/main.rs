@@ -51,7 +51,7 @@ fn main() {
     let args: Vec<String> = env::args().collect();
 
     if args.len() < 2 {
-        println!("Usage: chip8 <rom_path>");
+        println!("Usage: chipd-rust <rom_path>");
         return;
     }
 
@@ -97,22 +97,33 @@ fn main() {
         // get input
         for event in event_pump.poll_iter() {
             match event {
+                // Quit key down event
                 Event::Quit {..} |
                 Event::KeyDown { keycode: Some(Keycode::Escape), .. } => {
                     break 'running;
                 }
 
+                // Control key down events
                 Event::KeyDown {
                     keycode: Some(Keycode::R),
                     keymod,
                     repeat: false,
                     ..
                 } if keymod.intersects(Mod::LCTRLMOD | Mod::RCTRLMOD) => {
-                    println!("Reset!");
+                    println!("Reset");
                     cpu.reset();
                 }
+                Event::KeyDown {
+                    keycode: Some(Keycode::P),
+                    keymod,
+                    repeat: false,
+                    ..
+                } if keymod.intersects(Mod::LCTRLMOD | Mod::RCTRLMOD) => {
+                    cpu.paused = !cpu.paused;
+                    println!("Paused = {}", cpu.paused);
+                }
 
-                // Chip 8 emulator key down
+                // Chip 8 emulator key down event
                 Event::KeyDown {
                     keycode: Some(key),
                     repeat: false,
@@ -123,7 +134,7 @@ fn main() {
                     }
                 }
 
-                // Chip 8 emulator key up
+                // Chip 8 emulator key up event
                 Event::KeyUp {
                     keycode: Some(key),
                     ..
