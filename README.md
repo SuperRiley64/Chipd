@@ -1,5 +1,6 @@
 # Chip'd
 A Chip-8 emulator written in Rust using SDL2. 
+<img width="515" height="290" alt="image" src="https://github.com/user-attachments/assets/08bf3ce9-11f4-473d-a1ca-93872a906969" />
 
 ---
 
