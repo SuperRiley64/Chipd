@@ -1,6 +1,8 @@
 # Chip'd
 A Chip-8 emulator written in Rust using SDL2. 
+
 ---
+
 ## Usage
 `chipd-rust [rom location]`
 
@@ -24,7 +26,9 @@ Keyboard mapping:
 └───┴───┴───┴───┘  └───┴───┴───┴───┘
 
 ```
+
 ---
+
 ## Build steps on MacOS
 1. Install SDL with `brew install sdl`
 2. Add sdl2 to the PATH (temporary):
